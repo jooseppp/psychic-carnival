@@ -6,14 +6,14 @@ import Login from "./Components/LoginPage/Login";
 import Homepage from "./Components/Homepage/Homepage";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Homepage />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<Homepage />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 // interface DrawerProps {
 //     // TODO Remove mousehandlerEvent from any
@@ -7,8 +7,8 @@ import React from "react"
 
 const Drawer: React.FC = () => {
     const buttonClickHandler = () => {
-        console.log("Clicked")
-    }
+        console.log("Clicked");
+    };
 
     return (
         <div>
@@ -16,7 +16,7 @@ const Drawer: React.FC = () => {
                 <button onClick={buttonClickHandler}>Vajuta</button>
             </li> */}
         </div>
-    )
-}
+    );
+};
 
-export default Drawer
+export default Drawer;

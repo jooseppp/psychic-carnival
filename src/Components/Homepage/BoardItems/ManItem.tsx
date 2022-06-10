@@ -1,10 +1,10 @@
-import React from "react"
-import { motion } from "framer-motion"
+import React from "react";
+import { motion } from "framer-motion";
 
 const ManItem: React.FC = () => {
     const enterHandler = () => {
-        console.log("spawned")
-    }
+        console.log("spawned");
+    };
     return (
         <>
             <motion.div
@@ -20,7 +20,7 @@ const ManItem: React.FC = () => {
                 whileHover={{ scale: 1.1 }}
             />
         </>
-    )
-}
+    );
+};
 
-export default ManItem
+export default ManItem;

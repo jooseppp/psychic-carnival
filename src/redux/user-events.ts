@@ -1,4 +1,3 @@
-
 export interface UserEvent {
     id: number;
     title: string;

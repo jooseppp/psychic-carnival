@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 const Login = () => {
     return (
@@ -6,7 +6,7 @@ const Login = () => {
             <input type="email" autoComplete="true" placeholder="Email" />
             <input type="password" autoComplete="true" placeholder="Password" />
         </div>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;

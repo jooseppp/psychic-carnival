@@ -1,26 +1,22 @@
-import React, { useState } from "react"
-import Drawer from "../Drawer/Drawer"
-import { motion } from "framer-motion"
-import ManItem from "./BoardItems/ManItem"
-
-const ItemsComponent = (props: any) => {
-    return <div>{props}</div>
-}
+import React, { useState } from "react";
+import Drawer from "../Drawer/Drawer";
+import { motion } from "framer-motion";
+import ManItem from "./BoardItems/ManItem";
 
 interface HomepageProps {
-    children?: JSX.Element | JSX.Element[]
+    children?: JSX.Element | JSX.Element[];
 }
 
 const Homepage: React.FC<HomepageProps> = () => {
-    const [components, setComponents] = useState([<ManItem />])
+    const [components, setComponents] = useState([<ManItem />]);
 
     const handleClick = () => {
-        setComponents([...components, <ManItem />])
-    }
+        setComponents([...components, <ManItem />]);
+    };
 
     const clearItems = () => {
         setComponents([]);
-    }
+    };
 
     return (
         <div>
@@ -33,11 +29,11 @@ const Homepage: React.FC<HomepageProps> = () => {
                         <>
                             <div>{item}</div>
                         </>
-                    )
+                    );
                 })}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Homepage
+export default Homepage;

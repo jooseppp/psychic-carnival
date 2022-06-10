@@ -1,8 +1,10 @@
 # Dance_Visualizer
+
 ## Bachelors theseis for Joosep Penjam at Tallinn University
 
 The core idea for the project is to help choreographers and dance teachers to visualizer their idea, artistic impressions on a platform that made specifically to conduct movement through the act, enhance the overview of coordination and overall planning of a perfomance.
 <br></br>
+
 ## Running Dance_Visualizer project
 
 Locally you can start the project with:
