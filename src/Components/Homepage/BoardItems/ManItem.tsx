@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const ManItem: React.FC = () => {
+
+const Person: React.FC = () => {
     const enterHandler = () => {
         console.log("spawned");
     };
@@ -10,17 +11,19 @@ const ManItem: React.FC = () => {
             <motion.div
                 drag={true}
                 onViewportEnter={enterHandler}
-                dragConstraints={{ left: 0, right: 500 }}
-                whileDrag={{ scale: 2 }}
+                dragConstraints={{ left: 0, right: 1820 }}
+                whileDrag={{ scale: 1 }}
                 style={{
+                    position: "absolute",
+                    zIndex: 10,
                     width: "50px",
                     height: "50px",
                     backgroundColor: "red",
                 }}
-                whileHover={{ scale: 1.1 }}
+                whileHover={{  }}
             />
         </>
     );
 };
 
-export default ManItem;
+export default Person;
