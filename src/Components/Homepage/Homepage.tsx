@@ -18,11 +18,16 @@ const Homepage: React.FC<HomepageProps> = () => {
         setComponents([...components, <ManItem />])
     }
 
+    const clearItems = () => {
+        setComponents([]);
+    }
+
     return (
         <div>
             <Drawer />
             <div className="board">
                 <button onClick={handleClick}>Click</button>
+                <button onClick={clearItems}>Clear</button>
                 {components.map((item, i) => {
                     return (
                         <>
