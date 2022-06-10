@@ -10,7 +10,8 @@ const ManItem: React.FC = () => {
             <motion.div
                 drag={true}
                 onViewportEnter={enterHandler}
-                dragConstraints={{ left: -100 }}
+                dragConstraints={{ left: 0, right: 500 }}
+                whileDrag={{ scale: 2 }}
                 style={{
                     width: "50px",
                     height: "50px",
