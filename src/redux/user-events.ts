@@ -1,9 +1,16 @@
 import { Action, ThunkAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
+import { ItemType } from "../Components/lib/intefaces";
+import { Person } from "../Components/lib/intefaces";
+import { Shape } from "../Components/lib/intefaces";
 
 export interface UserEvent {
     id: number;
     title: string;
+    board: {
+        people: Person[];
+        shapes: Shape[];
+    };
 }
 
 interface UserEventsState {
@@ -39,7 +46,7 @@ export const loadUserEvents =
             type: LOAD_REQUEST,
         });
         try {
-            const res = await fetch("http://localhost:3001/api");
+            const res = await fetch("http://localhost:3001/items");
             const events: UserEvent[] = await res.json();
             dispatch({
                 type: LOAD_SUCCESS,
@@ -61,7 +68,7 @@ interface CreateRequestAction extends Action<typeof CREATE_REQUEST> {}
 
 interface CreateSuccessAction extends Action<typeof CREATE_SUCCESS> {
     payload: {
-        event: string; // Should be UserEvent
+        event: UserEvent;
     };
 }
 
@@ -81,10 +88,45 @@ export const createUserEvent =
             type: CREATE_REQUEST,
         });
         try {
-            // TODO Create Request stuff
+            const event: Omit<UserEvent, "id"> = {
+                title: "test",
+                board: {
+                    people: [
+                        {
+                            id: 1,
+                            name: "test1",
+                            posX: 200,
+                            posY: 200,
+                        },
+                        {
+                            id: 2,
+                            name: "test2",
+                            posX: 300,
+                            posY: 300,
+                        },
+                    ],
+                    shapes: [
+                        {
+                            id: 1,
+                            type: ItemType.CIRCLE,
+                        },
+                    ],
+                },
+            };
+
+            const response = await fetch("http://localhost:3001/items", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(event),
+            });
+
+            const createdEvent: UserEvent = await response.json();
+
             dispatch({
                 type: CREATE_SUCCESS,
-                payload: { event: "tere" },
+                payload: { event: createdEvent },
             });
         } catch (e) {
             dispatch({
@@ -94,9 +136,46 @@ export const createUserEvent =
         }
     };
 
+const selectUserEventsState = (rootState: RootState) => rootState.userEvents;
+
+export const selectUserEventsArray = (rootState: RootState) => {
+    const state = selectUserEventsState(rootState);
+    return state.allIds.map((id) => state.byIds[id]);
+};
 
 const initialState: UserEventsState = {
     byIds: {},
-    allIds: []
-}
+    allIds: [],
+};
 
+const userEventsReducer = (
+    state: UserEventsState = initialState,
+    action: LoadSuccessAction | CreateSuccessAction
+) => {
+    switch (action.type) {
+        case LOAD_SUCCESS:
+            const { events } = action.payload;
+            return {
+                ...state,
+                allIds: events.map(({ id }) => id),
+                byIds: events.reduce<UserEventsState["byIds"]>(
+                    (byIds, event) => {
+                        byIds[event.id] = event;
+                        return byIds;
+                    },
+                    {}
+                ),
+            };
+        case CREATE_SUCCESS:
+            const { event } = action.payload;
+            return {
+                ...state,
+                allIds: [...state.allIds, event.id],
+                byIds: { ...state.byIds, [event.id]: event },
+            };
+        default:
+            return state;
+    }
+};
+
+export default userEventsReducer;

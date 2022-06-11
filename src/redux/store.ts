@@ -1,13 +1,12 @@
 import {
-    applyMiddleware,
     combineReducers,
     configureStore,
-    MiddlewareArray,
 } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
+import userEventsReducer from "./user-events";
 
 const rootReducer = combineReducers({
-    // userEvents: userEventsReducer
+    userEvents: userEventsReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

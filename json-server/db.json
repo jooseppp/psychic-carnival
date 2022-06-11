@@ -1,0 +1,74 @@
+{
+    "items": [
+        {
+            "id": 1,
+            "title": "Tuljak",
+            "board": {
+                "people": [
+                    {
+                        "id": 1,
+                        "name": "person1",
+                        "posX": 220,
+                        "posY": 220
+                    },
+                    {
+                        "id": 2,
+                        "name": "person2",
+                        "posX": 500,
+                        "posY": 642
+                    },
+                    {
+                        "id": 3,
+                        "name": "person3",
+                        "posX": 520,
+                        "posY": 320
+                    }
+                ],
+                "shapes": [
+                    {
+                        "id": 1,
+                        "type": "circle",
+                        "posX": "500",
+                        "posY": "500",
+                        "onShape": [1, 2]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "title": "Talgukaalup",
+            "board": {
+                "people": [
+                    {
+                        "id": 1,
+                        "name": "person1",
+                        "posX": 500,
+                        "posY": 120
+                    },
+                    {
+                        "id": 2,
+                        "name": "person2",
+                        "posX": 420,
+                        "posY": 690
+                    }
+                ],
+                "shapes": [
+                    {
+                        "id": 1,
+                        "type": "circle",
+                        "posX": "500",
+                        "posY": "500",
+                        "onShape": [1, 2]
+                    },
+                    {
+                        "id": 2,
+                        "type": "triangle",
+                        "posX": 1200,
+                        "posY": 800
+                    }
+                ]
+            }
+        }
+    ]
+}

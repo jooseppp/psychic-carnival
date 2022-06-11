@@ -1,53 +1,91 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { RootState } from "../../redux/store";
+import { connect, ConnectedProps } from "react-redux";
+import { selectUserEventsArray, loadUserEvents } from "../../redux/user-events";
 import Drawer from "../Drawer/Drawer";
-import { motion } from "framer-motion";
-import Person from "./BoardItems/ManItem";
-import { Shapes } from "../lib/intefaces";
+import PersonItem from "./BoardItems/PersonItem";
 import ShapeItem from "./BoardItems/ShapeItem";
+import { UserEvent } from "../../redux/user-events";
 
-interface HomepageProps {
+const mapState = (state: RootState) => ({
+    items: selectUserEventsArray(state),
+});
+
+const mapDispatch = {
+    loadUserEvents,
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+interface Props extends PropsFromRedux {
     children?: JSX.Element | JSX.Element[];
 }
 
-const Homepage: React.FC<HomepageProps> = () => {
-    const [components, setComponents] = useState([<Person />]);
-    const [shapes, setShapes] = useState([<ShapeItem posX={100} posY={100} />]);
+const groupItemsByBoard = (items: UserEvent[]) => {
+    const groups: Record<string, UserEvent[]> = {};
 
-    const createItem = () => {
-        setComponents([...components, <Person />]);
+    const addToGroups = (itemKey: number, item: UserEvent) => {
+        if (groups[itemKey] === undefined) {
+            groups[itemKey] = [];
+        }
+        groups[itemKey].push(item);
     };
 
-    const clearItems = () => {
-        setComponents([]);
-        setShapes([]);
+    items.forEach((item) => {
+        const itemKey = item.id;
+        addToGroups(itemKey, item);
+    });
+    return groups;
+};
+
+const Homepage: React.FC<Props> = ({ items, loadUserEvents }) => {
+    const [loading, setLoading] = useState(true);
+    const [people, setPeople] = useState<UserEvent[]>([]);
+    let groupedItems: ReturnType<typeof groupItemsByBoard> | undefined;
+    if (items.length) {
+        groupedItems = groupItemsByBoard(items);
+    }
+
+    const posChangeHanlder = (): { posX: number; posY: number } => {
+        return { posX: 200, posY: 300 };
     };
 
-    const createShape = () => {
-        const randX = Math.random() * (500-100) + 100;
-        const randY = Math.random() * (500-100) + 100;
-        setShapes([...shapes, <ShapeItem posX={randX} posY={randY} />]);
-    };
+    useEffect(() => {
+        loadUserEvents();
+        setLoading(false);
+    }, []);
 
     return (
-        <div>
-            <Drawer />
-            <div className="board" style={{zIndex: 99}}>
-                <button onClick={createItem}>Create person</button>
-                <button onClick={createShape}>Create Shape</button>
-                <button onClick={clearItems}>Clear</button>
-                {components.map((item, i) => {
-                    return (
-                        <>
-                            <div>{item}</div>
-                        </>
-                    );
-                })}
-                {shapes.map((shape) => {
-                    return <>{shape}</>;
-                })}
-            </div>
-        </div>
+        <>
+            {loading ? (
+                <p>Loading</p>
+            ) : (
+                <>
+                    {items.length > 0 &&
+                        items.map((item) => {
+                            return (
+                                <>
+                                    {item.board.people.map((person) => {
+                                        return (
+                                            <>
+                                                <PersonItem
+                                                    key={item.id}
+                                                    name={person.name}
+                                                    posX={person.posX}
+                                                    posY={person.posY}
+                                                />
+                                            </>
+                                        );
+                                    })}
+                                </>
+                            );
+                        })}
+                </>
+            )}
+        </>
     );
 };
 
-export default Homepage;
+export default connector(Homepage);
