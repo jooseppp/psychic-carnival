@@ -1,70 +1,45 @@
-import React, { useEffect } from "react";
-import {
-    animate,
-    motion,
-    useMotionValue,
-    useSpring,
-    useVelocity,
-} from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 interface PersonItemProps {
+    id: number;
     name: string;
     posX: number;
     posY: number;
-    onClick?: (e: React.MouseEventHandler<HTMLDivElement>) => void;
 }
 
-const PersonItem: React.FC<PersonItemProps> = ({
-    name,
-    posX,
-    posY,
-    // onChangePos,
-}) => {
-    // const setPosX = Math.abs(window.innerWidth - (window.innerWidth + posX));
-    // const setPosY = Math.abs(window.innerHeight - (window.innerHeight + posY));
-    // const onChangePos = (posX: number, posY: number): void => {
-    //     console.log(x.getVelocity());
-    // };
+const PersonItem: React.FC<PersonItemProps> = ({ name, posX, posY }) => {
+    const [position, setPosition] = useState({
+        setposX: posX,
+        setposY: posY,
+    });
 
-
-    let x = useMotionValue(0);
-
-    const onDragEndHandler = () => {};
-
-    // const spring = {
-    //     gentle: {
-    //         mass: 20,
-    //         friction: 180,
-    //     },
-    // };
-
-    // const container = {
-    //     expanded: {
-    //         transition: spring.gentle,
-    //     },
-    // };
-
-    const onClickHandler = (info: any) => {
-        // console.log(name, "X: ", info.pageX, " Y: ", info.pageY);
-    };
+    useEffect(() => {
+        setPosition({ setposX: posX, setposY: posY });
+    }, []);
 
     return (
-        <motion.div
-            drag={true}
-            animate="expanded"
-            // variants={container}
-            // onDrag={(event, info) => onChangePos(info.point.x, info.point.y)}
-            onDragEnd={(event) => onDragEndHandler}
-            style={{
-                left: `${posX}px`,
-                top: `${posY}px`,
-                position: "absolute",
-                width: "30px",
-                height: "30px",
-                backgroundColor: "red",
-                borderRadius: "50%",
-            }}
-        ></motion.div>
+        <>
+            {position ? (
+                <>
+                    <motion.div
+                        drag
+                        dragMomentum={false}
+                        dragConstraints={{ left: 0, right: 1000, top: 0 }}
+                        style={{
+                            left: `${position.setposX}px`,
+                            top: `${position.setposY}px`,
+                            height: "50px",
+                            width: "50px",
+                            borderRadius: "50%",
+                            backgroundColor: "red",
+                        }}
+                    />
+                </>
+            ) : (
+                <p>Loading...</p>
+            )}
+        </>
     );
 };
 

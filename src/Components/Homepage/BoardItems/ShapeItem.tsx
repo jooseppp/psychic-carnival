@@ -1,20 +1,17 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-interface ShapeItemProps {
-    posX: number;
-    posY: number;
-}
+interface ShapeItemProps {}
 
-const ShapeItem: React.FC<ShapeItemProps> = ({ posX, posY }) => {
-    
+const ShapeItem: React.FC<ShapeItemProps> = () => {
     return (
         <motion.div
-            drag={true}
+            drag
+            dragMomentum={false}
             style={{
                 position: "absolute",
-                left: `${posX}px`,
-                top: `${posY}px`,
+                left: "120px",
+                top: "200px",
                 height: "100px",
                 width: "100px",
                 backgroundColor: "none",
@@ -25,3 +22,6 @@ const ShapeItem: React.FC<ShapeItemProps> = ({ posX, posY }) => {
 };
 
 export default ShapeItem;
+
+// left: `${posX}px`,
+// top: `${posY}px`,

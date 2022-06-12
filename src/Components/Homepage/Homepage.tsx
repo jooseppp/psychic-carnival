@@ -69,7 +69,7 @@ const Homepage: React.FC<Props> = ({ items, loadUserEvents }) => {
                                         type="submit"
                                         className="primary"
                                     >
-                                        {item.title} {item.id}
+                                        {item.title}
                                     </Button>
                                 </>
                             );
