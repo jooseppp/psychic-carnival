@@ -12,7 +12,13 @@ const ShapeItem: React.FC<ShapeItemProps> = ({ posX, posY }) => {
         <motion.div
             drag={true}
             style={{
-                
+                position: "absolute",
+                left: `${posX}px`,
+                top: `${posY}px`,
+                height: "100px",
+                width: "100px",
+                backgroundColor: "none",
+                border: "1px solid black",
             }}
         />
     );
