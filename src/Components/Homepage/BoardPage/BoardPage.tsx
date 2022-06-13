@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { UserEvent } from "../../../redux/user-events";
 import BoundingBox from "../../../../node_modules/framer-motion/types/projection/geometry/types";
 import PersonItem from "../BoardItems/PersonItem";
+import ShapeItem from "../BoardItems/ShapeItem";
 
 enum ItemTypes {
     CARD = "card",
@@ -34,6 +35,17 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                                     name={person.name}
                                     posX={person.posX}
                                     posY={person.posY}
+                                />
+                            );
+                        })}
+                        {danceData.board.shapes.map((shape) => {
+                            return (
+                                <ShapeItem
+                                    key={shape.id}
+                                    id={shape.id}
+                                    type="circle"
+                                    posX={shape.posX}
+                                    posY={shape.posY}
                                 />
                             );
                         })}

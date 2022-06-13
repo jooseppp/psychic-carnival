@@ -1,7 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { UserEvent } from "../../../redux/user-events";
 
-interface ShapeItemProps {}
+interface ShapeItemProps {
+    id: number;
+    type: string;
+    posX: number;
+    posY: number;
+    onShape?: UserEvent["id"];
+}
 
 const ShapeItem: React.FC<ShapeItemProps> = () => {
     return (
@@ -12,10 +19,11 @@ const ShapeItem: React.FC<ShapeItemProps> = () => {
                 position: "absolute",
                 left: "120px",
                 top: "200px",
-                height: "100px",
-                width: "100px",
+                height: "300px",
+                width: "300px",
                 backgroundColor: "none",
                 border: "1px solid black",
+                borderRadius: "50%",
             }}
         />
     );

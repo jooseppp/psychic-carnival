@@ -15,21 +15,21 @@
                         "id": 2,
                         "name": "person2",
                         "posX": 500,
-                        "posY": 642
+                        "posY": 142
                     },
                     {
                         "id": 3,
                         "name": "person3",
                         "posX": 520,
-                        "posY": 320
+                        "posY": 220
                     }
                 ],
                 "shapes": [
                     {
                         "id": 1,
                         "type": "circle",
-                        "posX": "500",
-                        "posY": "500",
+                        "posX": 240,
+                        "posY": 130,
                         "onShape": [1, 2]
                     }
                 ]
@@ -50,22 +50,22 @@
                         "id": 2,
                         "name": "person2",
                         "posX": 420,
-                        "posY": 690
+                        "posY": 320
                     }
                 ],
                 "shapes": [
                     {
                         "id": 1,
                         "type": "circle",
-                        "posX": "500",
-                        "posY": "500",
+                        "posX": 120,
+                        "posY": 320,
                         "onShape": [1, 2]
                     },
                     {
                         "id": 2,
                         "type": "triangle",
-                        "posX": 1200,
-                        "posY": 800
+                        "posX": 940,
+                        "posY": 100
                     }
                 ]
             }

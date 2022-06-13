@@ -1,7 +1,9 @@
+import { UserEvent } from "../../redux/user-events";
+
 export enum ItemType {
     CIRCLE = "circle",
     SQUARE = "square",
-    PERSON = "person"
+    PERSON = "person",
 }
 
 export interface Person {
@@ -13,7 +15,8 @@ export interface Person {
 
 export interface Shape {
     id: number;
-    type: ItemType
+    type: string;
+    posX: number;
+    posY: number;
+    onShape?: UserEvent["id"][];
 }
-
-

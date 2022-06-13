@@ -108,7 +108,10 @@ export const createUserEvent =
                     shapes: [
                         {
                             id: 1,
-                            type: ItemType.CIRCLE,
+                            type: "circle",
+                            posX: 120,
+                            posY: 320,
+                            onShape: [1, 2],
                         },
                     ],
                 },

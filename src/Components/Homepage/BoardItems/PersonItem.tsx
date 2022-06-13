@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { UserEvent } from "../../../redux/user-events";
 
 interface PersonItemProps {
     id: number;
@@ -16,6 +17,7 @@ const PersonItem: React.FC<PersonItemProps> = ({ name, posX, posY }) => {
 
     useEffect(() => {
         setPosition({ setposX: posX, setposY: posY });
+        console.log(position);
     }, []);
 
     return (
@@ -25,10 +27,10 @@ const PersonItem: React.FC<PersonItemProps> = ({ name, posX, posY }) => {
                     <motion.div
                         drag
                         dragMomentum={false}
-                        dragConstraints={{ left: 0, right: 1000, top: 0 }}
                         style={{
-                            left: `${position.setposX}px`,
-                            top: `${position.setposY}px`,
+                            position: "absolute",
+                            marginLeft: `${position.setposX}px`,
+                            marginTop: `${position.setposY}px`,
                             height: "50px",
                             width: "50px",
                             borderRadius: "50%",
