@@ -1,0 +1,6 @@
+.homepage_container {
+    display: flex;
+    width: 100vw;
+    height: 95vh;
+    background-color: whitesmoke;
+}

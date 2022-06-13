@@ -6,19 +6,19 @@
             "board": {
                 "people": [
                     {
-                        "id": 1,
+                        "id": 0,
                         "name": "person1",
                         "posX": 220,
                         "posY": 220
                     },
                     {
-                        "id": 2,
+                        "id": 1,
                         "name": "person2",
                         "posX": 500,
                         "posY": 142
                     },
                     {
-                        "id": 3,
+                        "id": 2,
                         "name": "person3",
                         "posX": 520,
                         "posY": 220
@@ -26,7 +26,7 @@
                 ],
                 "shapes": [
                     {
-                        "id": 1,
+                        "id": 0,
                         "type": "circle",
                         "posX": 240,
                         "posY": 130,
@@ -41,13 +41,13 @@
             "board": {
                 "people": [
                     {
-                        "id": 1,
+                        "id": 0,
                         "name": "person1",
                         "posX": 500,
                         "posY": 120
                     },
                     {
-                        "id": 2,
+                        "id": 1,
                         "name": "person2",
                         "posX": 420,
                         "posY": 320
@@ -55,14 +55,14 @@
                 ],
                 "shapes": [
                     {
-                        "id": 1,
+                        "id": 0,
                         "type": "circle",
                         "posX": 120,
                         "posY": 320,
                         "onShape": [1, 2]
                     },
                     {
-                        "id": 2,
+                        "id": 1,
                         "type": "triangle",
                         "posX": 940,
                         "posY": 100

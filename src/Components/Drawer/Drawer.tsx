@@ -1,21 +1,29 @@
-import React from "react";
-
-// interface DrawerProps {
-//     // TODO Remove mousehandlerEvent from any
-//     buttonClickHandler: (e: React.MouseEventHandler<HTMLButtonElement | any>) => void;
-// }
+import React, { useState } from "react";
+import { Nav } from "react-bootstrap";
+import "./Drawer.css";
 
 const Drawer: React.FC = () => {
-    const buttonClickHandler = () => {
-        console.log("Clicked");
+    const [isVisible, setVisible] = useState(false);
+
+    const onClickHandler = () => {
+        setVisible(!isVisible);
     };
 
     return (
-        <div>
-            {/* <li>
-                <button onClick={buttonClickHandler}>Vajuta</button>
-            </li> */}
-        </div>
+        <Nav className="nav_container" 
+        activeKey="test2">
+            <Nav.Item className="nav_item" >
+                <Nav.Link eventKey="test1">Test</Nav.Link>
+            </Nav.Item>
+            <Nav.Item className="nav_item">
+                <Nav.Link eventKey="test2">Test2</Nav.Link>
+            </Nav.Item>
+            <Nav.Item className="nav_item">
+                <Nav.Link eventKey="disabled" disabled>
+                    Disabled
+                </Nav.Link>
+            </Nav.Item>
+        </Nav>
     );
 };
 

@@ -15,7 +15,7 @@ export interface Person {
 
 export interface Shape {
     id: number;
-    type: string;
+    shapeType: string;
     posX: number;
     posY: number;
     onShape?: UserEvent["id"][];
