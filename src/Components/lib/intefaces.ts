@@ -23,10 +23,6 @@ export interface Shape {
     onShape?: UserEvent["id"][];
 }
 
-export type Project<T extends string | number | symbol> = Readonly<{
-    dirs: Record<T, CollisionProps>
-  }>
-
 export interface CollisionProps {
     id: number;
     xLeft: number;
