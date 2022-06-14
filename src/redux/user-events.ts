@@ -111,6 +111,8 @@ export const createUserEvent =
                             shapeType: "circle",
                             posX: 120,
                             posY: 320,
+                            heigth: 300,
+                            width: 300,
                             onShape: [1, 2],
                         },
                     ],

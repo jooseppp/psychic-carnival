@@ -9,7 +9,10 @@ interface ShapeItemProps {
     shapeType: string;
     posX: number;
     posY: number;
+    heigth: number;
+    width: number;
     onShape?: UserEvent["id"][];
+
     triggerParentUpdate(
         id: number,
         shapeType: string,
@@ -23,6 +26,8 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
     shapeType,
     posX,
     posY,
+    heigth,
+    width,
     onShape,
     triggerParentUpdate,
 }) => {
@@ -54,8 +59,8 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
                 position: "absolute",
                 marginLeft: `${posX}px`,
                 marginTop: `${posY}px`,
-                height: "300px",
-                width: "300px",
+                height: `${heigth}px`,
+                width: `${width}px`,
                 backgroundColor: "none",
                 border: "1px solid black",
                 borderRadius: "50%",
@@ -70,6 +75,8 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
                         posX={300}
                         posY={300}
                         triggerParentUpdate={(testFunc)}
+                        // Next method does nothing
+                        getPosInfo={testFunc}
                     />
                 </div>
             ) : (

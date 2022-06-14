@@ -13,6 +13,7 @@ interface PersonItemProps {
         posX: number,
         posY: number
     ): void;
+    getPosInfo(id: number, posX: number, posY: number): void;
 }
 
 const PersonItem: React.FC<PersonItemProps> = ({
@@ -21,25 +22,15 @@ const PersonItem: React.FC<PersonItemProps> = ({
     posX,
     posY,
     triggerParentUpdate,
+    getPosInfo,
 }) => {
     const [position, setPosition] = useState({
         setposX: posX,
         setposY: posY,
     });
 
-    const testStuff = (
-        event: MouseEvent | TouchEvent | PointerEvent,
-        info: PanInfo
-    ) => {
-        let x = info.point.x;
-        if (x > 500) {
-            console.log("jah");
-        }
-    };
-
     useEffect(() => {
         setPosition({ setposX: posX, setposY: posY });
-        // console.log(position);
     }, []);
 
     return (
@@ -49,7 +40,9 @@ const PersonItem: React.FC<PersonItemProps> = ({
                     <motion.div
                         drag
                         dragMomentum={false}
-                        onDrag={(event, info) => testStuff(event, info)}
+                        onDrag={(event, info) =>
+                            getPosInfo(id, info.point.x, info.point.y)
+                        }
                         onDragEnd={(event, info) =>
                             triggerParentUpdate(
                                 id,

@@ -18,5 +18,19 @@ export interface Shape {
     shapeType: string;
     posX: number;
     posY: number;
+    heigth: number;
+    width: number;
     onShape?: UserEvent["id"][];
+}
+
+export type Project<T extends string | number | symbol> = Readonly<{
+    dirs: Record<T, CollisionProps>
+  }>
+
+export interface CollisionProps {
+    id: number;
+    xLeft: number;
+    xRight: number;
+    yTop: number;
+    yBottom: number;
 }
