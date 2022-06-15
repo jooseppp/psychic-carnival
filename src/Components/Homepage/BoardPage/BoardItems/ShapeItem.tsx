@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { UserEvent } from "../../../../redux/user-events";
 import { Shape } from "../../../lib/intefaces";
 import PersonItem from "./PersonItem";
+import { PersonItemProps } from "./PersonItem";
 
 interface ShapeItemProps {
     id: number;
@@ -11,9 +12,9 @@ interface ShapeItemProps {
     posY: number;
     heigth: number;
     width: number;
-    onShape?: UserEvent["id"][];
+    onShape: UserEvent["id"][] | [];
 
-    triggerParentUpdate(
+    triggerPositionUpdate(
         id: number,
         shapeType: string,
         posX: number,
@@ -29,15 +30,23 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
     heigth,
     width,
     onShape,
-    triggerParentUpdate,
+    triggerPositionUpdate,
 }) => {
     const [hasChildren, setHasChildren] = useState(false);
+    const [children, setChildren] = useState<number[] | undefined>(undefined);
 
-    const checkHasChildren = () => {
-        if (onShape !== undefined && onShape?.length > 0) {
-            return true;
+    const initShape = () => {
+        if (onShape.length > 0) {
+            setHasChildren(true);
         }
-        return false;
+        const getChildren = (): number[] => {
+            let childArr: number[] = [];
+            onShape.forEach((child) => {
+                childArr.push(child);
+            });
+            return childArr;
+        };
+        setChildren(onShape?.length > 0 ? undefined : getChildren());
     };
 
     const testFunc = () => {
@@ -45,16 +54,24 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
     };
 
     useEffect(() => {
-        setHasChildren(checkHasChildren());
+        initShape();
     }, []);
 
     return (
         <motion.div
             drag
             dragMomentum={false}
-            onDragEnd={(event, info) =>
-                triggerParentUpdate(id, "shape", info.point.x, info.point.y)
-            }
+            onDragEnd={(event, info) => {
+                if (hasChildren) {
+                    triggerPositionUpdate(
+                        id,
+                        "shape",
+                        info.point.x,
+                        info.point.y,
+                        [children]
+                    );
+                }
+            }}
             style={{
                 position: "absolute",
                 marginLeft: `${posX}px`,
@@ -74,9 +91,9 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
                         name={"test"}
                         posX={300}
                         posY={300}
-                        triggerParentUpdate={(testFunc)}
+                        triggerPositionUpdate={testFunc}
                         // Next method does nothing
-                        getPosInfo={testFunc}
+                        // getPosInfo={testFunc}
                     />
                 </div>
             ) : (

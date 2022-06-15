@@ -5,126 +5,65 @@ import BoundingBox from "../../../../node_modules/framer-motion/types/projection
 import PersonItem from "./BoardItems/PersonItem";
 import ShapeItem from "./BoardItems/ShapeItem";
 import { Shape, Person, CollisionProps } from "../../lib/intefaces";
+import { NumericLiteral } from "typescript";
 
 interface BoardPageProps {
     danceData?: UserEvent | undefined;
 }
 
 const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
-    const [waitingData, setWaitingData] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [peoplePositions, setPeoplePositions] = useState<
         Person[] | undefined
     >([]);
     const [shapePositions, setShapePosition] = useState<Shape[] | undefined>(
         []
     );
-    const [collisionZone, setCollisionZone] = useState<
-        Record<number | string | symbol, CollisionProps> | undefined
-    >();
 
-    const updatePosition = (
+    const onMoveObject = (
         id: number,
         type: string,
-        posX: number,
-        posY: number
+        newPosX: number,
+        newPosY: number,
+        hasChidren?: number[] | null | undefined,
     ) => {
-        // Not sure if best method to update personPosition list elements onDragEnd
-        switch (type) {
-            case "person": {
-                if (posX && posY && peoplePositions !== undefined) {
-                    console.log("updatePerson");
-                    peoplePositions[id].posX = posX;
-                    peoplePositions[id].posY = posY;
+        if (shapePositions !== undefined && peoplePositions !== undefined) {
+            switch (type) {
+                case "person": {
+                    const entity = peoplePositions[id];
+                    entity.posX = newPosX;
+                    entity.posY = newPosY;
+                    console.log(entity);
+                    break;
                 }
-                break;
-            }
-            case "shape": {
-                if (posX && posY && shapePositions !== undefined) {
-                    console.log(collisionZone);
-
-                    console.log("updateShape");
-                    shapePositions[id].posX = posX;
-                    shapePositions[id].posY = posY;
+                case "shape": {
+                    const entity = shapePositions[id];
+                    entity.posX = newPosX;
+                    entity.posY = newPosY;
+                    console.log(entity);
+                    break;
                 }
-                break;
+                default:
+                    return;
             }
-            default:
-                return;
         }
     };
 
-    // TODO Change danceData definition
-    const setInitialCollisionZone = (danceData: UserEvent) => {
-        const init_zones: number[] = [];
-        console.log("shape[]", shapePositions);
-        const shapeData = danceData.board.shapes;
-        shapeData.forEach((shape) => {
-            init_zones.push(shape.id);
-        });
-        console.log("initZones", init_zones);
-
-        calculateCollisionZone(null, init_zones);
-    };
-
-    const calculateCollisionZone = (
-        id?: number | null,
-        multiId?: number[] | null
-    ): void => {
-        console.log("collisionCalc", id);
-
-        if (shapePositions !== undefined && id) {
-            const entity = shapePositions[id];
-            const xLeft = entity.posX;
-            const xRight = entity.posX + entity.width;
-            const yTop = entity.posY;
-            const yBottom = entity.posY + entity.heigth;
-            setCollisionZone({
-                id: { id, xLeft, xRight, yBottom, yTop },
-            });
-        }
-        if (shapePositions !== undefined && multiId) {
-            multiId.forEach((id) => {
-                console.log(id);
-                const entity = shapePositions[id];
-                const xLeft = entity.posX;
-                const xRight = entity.posX + entity.width;
-                const yTop = entity.posY;
-                const yBottom = entity.posY + entity.heigth;
-                setCollisionZone({
-                    id: { id, xLeft, xRight, yBottom, yTop },
-                });
-            });
-        }
-    };
-
-    const setInitBoard = (): UserEvent | undefined => {
+    const setInitBoard = () => {
         if (danceData !== undefined) {
             setShapePosition(danceData?.board.shapes);
             setPeoplePositions(danceData?.board.people);
-            setWaitingData(false);
-            return danceData;
+            setLoading(false);
+        } else {
+            throw new Error("Couldn't load User Events");
         }
-        return undefined;
-    };
-
-    const detectCollisions = (id: number, posX: number, posY: number) => {
-        // if (id !== undefined && posX !== undefined && posY !== undefined) {
-        // }
     };
 
     useEffect(() => {
-        const init: any = async () => {
-            setInitBoard();
-            console.log("shape",shapePositions);
-            
-        };
-        console.log("3");
-        setInitialCollisionZone(init);
+        setInitBoard();
     }, []);
 
-    // useEffect(() => {
-    //     detectCollisions();
-    // }, [updatePosition]);
+    useEffect(() => {});
 
     return (
         <>
@@ -139,8 +78,8 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                                     name={person.name}
                                     posX={person.posX}
                                     posY={person.posY}
-                                    triggerParentUpdate={updatePosition}
-                                    getPosInfo={detectCollisions}
+                                    triggerPositionUpdate={onMoveObject}
+                                    // getPosInfo={detectCollisions}
                                 />
                             );
                         })}
@@ -155,7 +94,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                                     heigth={shape.heigth}
                                     width={shape.width}
                                     onShape={[1]}
-                                    triggerParentUpdate={updatePosition}
+                                    triggerPositionUpdate={onMoveObject}
                                 />
                             );
                         })}
@@ -169,3 +108,84 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
 };
 
 export default BoardPage;
+
+// const [collisionZone, setCollisionZone] = useState<
+//         Record<number | string | symbol, CollisionProps> | undefined
+//     >();
+
+// const setInitialCollisionZone = () => {
+//     const init_zones: number[] = [];
+
+//     if (shapePositions !== undefined) {
+//         shapePositions.forEach((shape) => {
+//             init_zones.push(shape.id);
+//         });
+//         calculateNewCollisionZone(null, init_zones);
+//     }
+// };
+
+// const detectCollisions = (id: number, posX: number, posY: number) => {
+//     // if (id !== undefined && posX !== undefined && posY !== undefined) {
+//     // }
+// };
+
+// const updatePosition = (
+//     id: number,
+//     type: string,
+//     posX: number,
+//     posY: number
+// ) => {
+//     // Not sure if best method to update personPosition list elements onDragEnd
+//     switch (type) {
+//         case "person": {
+//             if (posX && posY && peoplePositions !== undefined) {
+//                 peoplePositions[id].posX = posX;
+//                 peoplePositions[id].posY = posY;
+//             }
+//             break;
+//         }
+//         case "shape": {
+//             if (posX && posY && shapePositions !== undefined) {
+//                 shapePositions[id].posX = posX;
+//                 shapePositions[id].posY = posY;
+//             }
+//             break;
+//         }
+//         default:
+//             return;
+//     }
+// };
+
+// const calculateNewCollisionZone = (
+//     id?: number | null,
+//     multiId?: number[] | null
+// ): void => {
+//     if (shapePositions !== undefined && id) {
+//         console.log("singleCollisionUpdate");
+//         console.log(shapePositions[id]);
+
+//         const entity = shapePositions[id];
+//         const xLeft = entity.posX;
+//         const xRight = entity.posX + entity.width;
+//         const yTop = entity.posY;
+//         const yBottom = entity.posY + entity.heigth;
+//         setCollisionZone({
+//             id: { id, xLeft, xRight, yBottom, yTop },
+//         });
+//     }
+
+//     if (shapePositions !== undefined && multiId) {
+//         multiId.forEach((id) => {
+//             console.log("multiCollisionUpdate");
+//             const entity = shapePositions[id];
+//             const xLeft = entity.posX;
+//             const xRight = entity.posX + entity.width;
+//             const yTop = entity.posY;
+//             const yBottom = entity.posY + entity.heigth;
+//             setCollisionZone({
+//                 id: { id, xLeft, xRight, yBottom, yTop },
+//             });
+//             console.log("test", collisionZone);
+//         });
+//     }
+// };

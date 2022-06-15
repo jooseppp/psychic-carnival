@@ -1,7 +1,7 @@
 {
     "items": [
         {
-            "id": 1,
+            "id": 0,
             "title": "Tuljak",
             "board": {
                 "people": [
@@ -38,7 +38,7 @@
             }
         },
         {
-            "id": 2,
+            "id": 1,
             "title": "Talgukaalup",
             "board": {
                 "people": [

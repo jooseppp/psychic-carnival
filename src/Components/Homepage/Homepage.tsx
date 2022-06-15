@@ -27,17 +27,10 @@ interface Props extends PropsFromRedux {
 }
 
 const Homepage: React.FC<Props> = ({ items, loadUserEvents }) => {
-    useEffect(() => {
-        loadUserEvents();
-        handleShow();
-        setLoading(false);
-        setShow(true);
-    }, []);
-
     const [loading, setLoading] = useState(true);
-    const [people, setPeople] = useState<UserEvent[]>([]);
+    // const [people, setPeople] = useState<UserEvent[]>([]);
     const [show, setShow] = useState(false);
-    const [activeBoard, setActiveBoard] = useState<number>(0);
+    const [activeBoard, setActiveBoard] = useState<null | number>(null);
     const [activeData, setActiveData] = useState<UserEvent | undefined>(
         undefined
     );
@@ -48,44 +41,70 @@ const Homepage: React.FC<Props> = ({ items, loadUserEvents }) => {
 
     const onClickHanlder = (id: number): void => {
         setActiveBoard(id);
-        setActiveData(items[id - 1]);
+        setActiveData(items[id]);
         handleClose();
     };
+
+    useEffect(() => {
+        const initPageData = (): any => {
+            if (activeBoard && activeData) {
+                // TODO Later should implement page caching, so that if the page is soft reloaded
+                // then maybe we won't fetch data all over again. Needs localstorage implementation
+                handleShow();
+                setLoading(false);
+            }
+            loadUserEvents();
+            if (items !== undefined) {
+                handleShow();
+                setLoading(false);
+            }
+        };
+        initPageData();
+    }, []);
 
     return (
         <>
             <Drawer />
             <div className="homepage_container">
-                <div className="on_start_modal">
-                    <Modal show={show}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Vali tants</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body style={{ textAlign: "center" }}>
-                            {items.map((item) => {
-                                return (
-                                    <>
-                                        <Button
-                                            key={item.id}
-                                            onClick={() =>
-                                                onClickHanlder(item.id)
-                                            }
-                                            style={{ marginLeft: 10 }}
-                                            type="submit"
-                                            className="primary"
-                                        >
-                                            {item.title}
-                                        </Button>
-                                    </>
-                                );
-                            })}
-                        </Modal.Body>
-                    </Modal>
-                </div>
-                {activeBoard == 0 && activeData ? (
-                    <BoardPage key={activeBoard} />
+                {!loading ? (
+                    <>
+                        <div className="on_start_modal">
+                            <Modal show={show}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Vali tants</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body style={{ textAlign: "center" }}>
+                                    {items.map((item) => {
+                                        return (
+                                            <>
+                                                <Button
+                                                    key={item.id}
+                                                    onClick={() =>
+                                                        onClickHanlder(item.id)
+                                                    }
+                                                    style={{ marginLeft: 10 }}
+                                                    type="submit"
+                                                    className="primary"
+                                                >
+                                                    {item.title} {item.id}
+                                                </Button>
+                                            </>
+                                        );
+                                    })}
+                                </Modal.Body>
+                            </Modal>
+                        </div>
+                        {activeBoard !== null && activeData ? (
+                            <BoardPage
+                                key={activeBoard}
+                                danceData={activeData}
+                            />
+                        ) : (
+                            <p>Loading!</p>
+                        )}
+                    </>
                 ) : (
-                    <BoardPage key={activeBoard} danceData={activeData} />
+                    <p>Loading!</p>
                 )}
             </div>
         </>
@@ -93,7 +112,3 @@ const Homepage: React.FC<Props> = ({ items, loadUserEvents }) => {
 };
 
 export default connector(Homepage);
-
-{
-    /*  */
-}

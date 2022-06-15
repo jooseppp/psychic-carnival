@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { motion, PanInfo } from "framer-motion";
 import { UserEvent } from "../../../../redux/user-events";
 
-interface PersonItemProps {
+export interface PersonItemProps {
     id: number;
     name: string;
     posX: number;
     posY: number;
-    triggerParentUpdate(
+    triggerPositionUpdate(
         id: number,
         type: string,
         posX: number,
         posY: number
     ): void;
-    getPosInfo(id: number, posX: number, posY: number): void;
+    // getPosInfo(id: number): void;
 }
 
 const PersonItem: React.FC<PersonItemProps> = ({
@@ -21,8 +21,8 @@ const PersonItem: React.FC<PersonItemProps> = ({
     name,
     posX,
     posY,
-    triggerParentUpdate,
-    getPosInfo,
+    triggerPositionUpdate,
+    // getPosInfo,
 }) => {
     const [position, setPosition] = useState({
         setposX: posX,
@@ -40,11 +40,8 @@ const PersonItem: React.FC<PersonItemProps> = ({
                     <motion.div
                         drag
                         dragMomentum={false}
-                        onDrag={(event, info) =>
-                            getPosInfo(id, info.point.x, info.point.y)
-                        }
                         onDragEnd={(event, info) =>
-                            triggerParentUpdate(
+                            triggerPositionUpdate(
                                 id,
                                 "person",
                                 info.point.x,
