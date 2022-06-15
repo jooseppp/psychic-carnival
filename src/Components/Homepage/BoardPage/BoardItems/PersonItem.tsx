@@ -40,7 +40,6 @@ const PersonItem: React.FC<PersonItemProps> = ({
                     <motion.div
                         drag
                         dragMomentum={false}
-                        dragConstraints={{ left: 0, right: 500, bottom: 600 }}
                         onDragEnd={(event, info) =>
                             triggerPositionUpdate(
                                 id,

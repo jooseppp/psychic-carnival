@@ -11,7 +11,6 @@ import {
     Button,
     Popover,
 } from "react-bootstrap";
-import { setTarget } from "framer-motion/types/render/utils/setters";
 
 interface ShapeItemProps {
     id: number;
@@ -51,7 +50,7 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
     onShape,
     triggerPositionUpdate,
 }) => {
-    const [hasChildren, setHasChildren] = useState(false);
+    const [hasChildren, setHasChildren] = useState(true);
     const [children, setChildren] = useState<number[] | undefined>(undefined);
     const [pointsOnCircle, setPointsOnCircle] = useState<
         PointsOnCircleProps | {}
@@ -72,8 +71,11 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
 
     const renderHangPoints = () => {
         const circleDeg = 360;
-        const center_x = width - posX;
-        const center_y = heigth - posY;
+        const center_x = width / 2;
+        const center_y = heigth / 2;
+        console.log("center_x", center_x);
+        console.log("center_y", center_y);
+
         const radius = width / 2;
         const pointCount = 8;
         const renderPoints: Record<number, number[]> = {};
@@ -83,26 +85,31 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
             let y: number = 0;
             let x: number = 0;
             for (let i = 0; i < pointCount; i++) {
+                let distance = 1;
                 result += everyPointDiff;
-                y = center_x + radius + Math.cos((-result * Math.PI) / 180); // * distance;
-                x = center_y + radius + Math.sin((-result * Math.PI) / 180); // * distance;
+                x =
+                    center_x +
+                    radius * Math.cos((result * Math.PI) / 180) * distance;
+                y =
+                    center_y +
+                    radius * Math.sin((result * Math.PI) / 180) * distance;
+                console.log("i. x,y,deg:", i, x, y, result);
                 renderPoints[i] = [x, y];
             }
             return renderPoints;
         };
+
         setPointsOnCircle(assignPoints);
     };
 
     const pointsHelper = (): void => {
         let arr: number[] = [];
         let helper: any;
-        console.log("pointsOnCircle", pointsOnCircle);
 
         for (let key of Object.keys(pointsOnCircle)) {
             helper = Number(key);
             arr.push(helper);
         }
-        console.log("arr: ", arr);
 
         setArrHelper(arr);
     };
@@ -149,7 +156,37 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
                     borderRadius: "50%",
                 }}
             >
-                {pointsOnCircle && arrHelper.length > 0 && (
+                {hasChildren ? (
+                    <div className="sucker" style={{ width: "100%" }}>
+                        {arrHelper.map((arrItem) => {
+                            const data: PointsProps =
+                                Object.entries(pointsOnCircle)[arrItem][1];
+                            const posXY = data.posX;
+                            const posYX = data.posY;
+                            return (
+                                <motion.div
+                                    drag
+                                    className="differentDiv"
+                                    style={{
+                                        position: "absolute",
+                                        marginLeft: `${posXY}px`,
+                                        marginTop: `${posYX}px`,
+                                        height: "50px",
+                                        width: "50px",
+                                        borderRadius: "50%",
+                                        backgroundColor: "black",
+                                        border: "2px solid black",
+                                        textAlign: "center",
+                                    }}
+                                ></motion.div>
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <></>
+                )}
+
+                {/* {pointsOnCircle && arrHelper.length > 0 && (
                     <>
                         {arrHelper.forEach((arrItem) => {
                             const data: PointsProps =
@@ -161,8 +198,8 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
                                     key={1}
                                     id={1}
                                     name={"test"}
-                                    posX={posX}
-                                    posY={posY}
+                                    posX={300}
+                                    posY={300}
                                     triggerPositionUpdate={testFunc}
                                     // Next method does nothing
                                     // getPosInfo={testFunc}
@@ -170,7 +207,7 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
                             );
                         })}
                     </>
-                )}
+                )} */}
 
                 {/* {hasChildren ? (
                     <div>
