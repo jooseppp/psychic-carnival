@@ -6,6 +6,7 @@ import PersonItem from "./BoardItems/PersonItem";
 import ShapeItem from "./BoardItems/ShapeItem";
 import { Shape, Person, CollisionProps } from "../../lib/intefaces";
 import { NumericLiteral } from "typescript";
+import { has } from "immer/dist/internal";
 
 interface BoardPageProps {
     danceData?: UserEvent | undefined;
@@ -25,7 +26,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
         type: string,
         newPosX: number,
         newPosY: number,
-        hasChidren?: number[] | null | undefined,
+        hasChidren?: number[] | undefined
     ) => {
         if (shapePositions !== undefined && peoplePositions !== undefined) {
             switch (type) {
@@ -40,7 +41,12 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                     const entity = shapePositions[id];
                     entity.posX = newPosX;
                     entity.posY = newPosY;
-                    console.log(entity);
+                    if (hasChidren !== undefined && hasChidren.length > 0) {
+                        hasChidren.forEach((childId) => {
+                            const childEntity = peoplePositions[childId];
+                            console.log("Moved child: ", childEntity);
+                        });
+                    }
                     break;
                 }
                 default:
@@ -62,8 +68,6 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
     useEffect(() => {
         setInitBoard();
     }, []);
-
-    useEffect(() => {});
 
     return (
         <>
@@ -93,7 +97,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                                     posY={shape.posY}
                                     heigth={shape.heigth}
                                     width={shape.width}
-                                    onShape={[1]}
+                                    onShape={[1, 2]}
                                     triggerPositionUpdate={onMoveObject}
                                 />
                             );
