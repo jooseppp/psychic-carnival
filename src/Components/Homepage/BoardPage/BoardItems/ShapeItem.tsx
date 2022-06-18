@@ -71,10 +71,8 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
 
     const renderHangPoints = () => {
         const circleDeg = 360;
-        const center_x = width / 2;
-        const center_y = heigth / 2;
-        console.log("center_x", center_x);
-        console.log("center_y", center_y);
+        const center_x = width / 2 - 5;
+        const center_y = heigth / 2 - 5;
 
         const radius = width / 2;
         const pointCount = 8;
@@ -85,15 +83,14 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
             let y: number = 0;
             let x: number = 0;
             for (let i = 0; i < pointCount; i++) {
-                let distance = 1;
+                let distance = 0;
                 result += everyPointDiff;
-                x =
-                    center_x +
-                    radius * Math.cos((result * Math.PI) / 180) * distance;
-                y =
-                    center_y +
-                    radius * Math.sin((result * Math.PI) / 180) * distance;
-                console.log("i. x,y,deg:", i, x, y, result);
+                // Calculate position of x,y on circle using trigonometry
+                // Since we are using x,y positions to put them on the circle, they will align to the grid from left and top, which means their position will be offset
+                // by half of the size of the dot. So considering this, you should subtract half of the rendered circle heigth and width from center_x and center_y
+                x = center_x + radius * Math.cos((result * Math.PI) / 180); // * distance * 100) / width;
+                y = center_y + radius * Math.sin((result * Math.PI) / 180); // * distance * 100 / heigth;
+                console.log("math", x, y);
                 renderPoints[i] = [x, y];
             }
             return renderPoints;
@@ -133,6 +130,7 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
         <>
             <motion.div
                 drag
+                dragConstraints={{left: -100,top:0,bottom: 1500,right: 1500}}
                 dragMomentum={false}
                 onDragEnd={(event, info) => {
                     if (hasChildren && children) {
@@ -156,35 +154,41 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
                     borderRadius: "50%",
                 }}
             >
-                {hasChildren ? (
-                    <div className="sucker" style={{ width: "100%" }}>
-                        {arrHelper.map((arrItem) => {
-                            const data: PointsProps =
-                                Object.entries(pointsOnCircle)[arrItem][1];
-                            const posXY = data.posX;
-                            const posYX = data.posY;
-                            return (
-                                <motion.div
-                                    drag
-                                    className="differentDiv"
-                                    style={{
-                                        position: "absolute",
-                                        marginLeft: `${posXY}px`,
-                                        marginTop: `${posYX}px`,
-                                        height: "50px",
-                                        width: "50px",
-                                        borderRadius: "50%",
-                                        backgroundColor: "black",
-                                        border: "2px solid black",
-                                        textAlign: "center",
-                                    }}
-                                ></motion.div>
-                            );
-                        })}
-                    </div>
-                ) : (
-                    <></>
-                )}
+                <div
+                    className="children_container"
+                    style={{ width: "100%", height: "100%" }}
+                >
+                    {hasChildren ? (
+                        <>
+                            {arrHelper.map((arrItem) => {
+                                const data =
+                                    Object.entries(pointsOnCircle)[arrItem][1];
+                                const posX_onCircle: number = data[0];
+                                const posY_onCircle: number = data[1];
+
+                                return (
+                                    <motion.div
+                                        drag
+                                        className="childOnCricle_entity"
+                                        style={{
+                                            position: "absolute",
+                                            left: `${posX_onCircle}px`,
+                                            top: `${posY_onCircle}px`,
+                                            height: "10px",
+                                            width: "10px",
+                                            borderRadius: "50%",
+                                            backgroundColor: "black",
+                                            border: "2px solid black",
+                                            textAlign: "center",
+                                        }}
+                                    ></motion.div>
+                                );
+                            })}
+                        </>
+                    ) : (
+                        <></>
+                    )}
+                </div>
 
                 {/* {pointsOnCircle && arrHelper.length > 0 && (
                     <>
