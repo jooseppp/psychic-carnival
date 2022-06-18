@@ -34,7 +34,6 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                     const entity = peoplePositions[id];
                     entity.posX = newPosX;
                     entity.posY = newPosY;
-                    console.log(entity);
                     break;
                 }
                 case "shape": {
@@ -44,7 +43,6 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                     if (hasChidren !== undefined && hasChidren.length > 0) {
                         hasChidren.forEach((childId) => {
                             const childEntity = peoplePositions[childId];
-                            console.log("Moved child: ", childEntity);
                         });
                     }
                     break;

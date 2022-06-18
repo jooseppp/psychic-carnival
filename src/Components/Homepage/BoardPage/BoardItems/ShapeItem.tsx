@@ -86,8 +86,10 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
                 let distance = 0;
                 result += everyPointDiff;
                 // Calculate position of x,y on circle using trigonometry
-                // Since we are using x,y positions to put them on the circle, they will align to the grid from left and top, which means their position will be offset
-                // by half of the size of the dot. So considering this, you should subtract half of the rendered circle heigth and width from center_x and center_y
+                // Since we are using x,y positions to put them on the circle, they will align to the grid 
+                // from left and top, which means their position will be offset
+                // by half of the size of the dot. So considering this, you should subtract half of the rendered
+                // circle heigth and width from center_x and center_y
                 x = center_x + radius * Math.cos((result * Math.PI) / 180); // * distance * 100) / width;
                 y = center_y + radius * Math.sin((result * Math.PI) / 180); // * distance * 100 / heigth;
                 console.log("math", x, y);
