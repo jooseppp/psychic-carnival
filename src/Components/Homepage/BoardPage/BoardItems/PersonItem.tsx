@@ -13,7 +13,7 @@ export interface PersonItemProps {
         posX: number,
         posY: number
     ): void;
-    // getPosInfo(id: number): void;
+    triggerCollisionCheck(id: number, posX: number, posY: number): void;
 }
 
 const PersonItem: React.FC<PersonItemProps> = ({
@@ -22,15 +22,15 @@ const PersonItem: React.FC<PersonItemProps> = ({
     posX,
     posY,
     triggerPositionUpdate,
-    // getPosInfo,
+    triggerCollisionCheck,
 }) => {
     const [position, setPosition] = useState({
-        setposX: posX,
-        setposY: posY,
+        setPosX: posX,
+        setPosY: posY,
     });
 
     useEffect(() => {
-        setPosition({ setposX: posX, setposY: posY });
+        setPosition({ setPosX: posX, setPosY: posY });
     }, []);
 
     return (
@@ -40,6 +40,13 @@ const PersonItem: React.FC<PersonItemProps> = ({
                     <motion.div
                         drag
                         dragMomentum={false}
+                        onDrag={(event, info) =>
+                            triggerCollisionCheck(
+                                id,
+                                info.point.x,
+                                info.point.y
+                            )
+                        }
                         onDragEnd={(event, info) =>
                             triggerPositionUpdate(
                                 id,
@@ -50,8 +57,8 @@ const PersonItem: React.FC<PersonItemProps> = ({
                         }
                         style={{
                             position: "absolute",
-                            marginLeft: `${position.setposX}px`,
-                            marginTop: `${position.setposY}px`,
+                            left: `${position.setPosX}px`,
+                            top: `${position.setPosY}px`,
                             height: "50px",
                             width: "50px",
                             borderRadius: "50%",

@@ -8,8 +8,8 @@
                     {
                         "id": 0,
                         "name": "person1",
-                        "posX": 220,
-                        "posY": 220
+                        "posX": 520,
+                        "posY": 520
                     },
                     {
                         "id": 1,
@@ -28,7 +28,7 @@
                     {
                         "id": 0,
                         "type": "circle",
-                        "posX": 240,
+                        "posX": 500,
                         "posY": 130,
                         "heigth": 300,
                         "width": 300,

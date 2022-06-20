@@ -86,13 +86,12 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
                 let distance = 0;
                 result += everyPointDiff;
                 // Calculate position of x,y on circle using trigonometry
-                // Since we are using x,y positions to put them on the circle, they will align to the grid 
+                // Since we are using x,y positions to put them on the circle, they will align to the grid
                 // from left and top, which means their position will be offset
                 // by half of the size of the dot. So considering this, you should subtract half of the rendered
                 // circle heigth and width from center_x and center_y
                 x = center_x + radius * Math.cos((result * Math.PI) / 180); // * distance * 100) / width;
                 y = center_y + radius * Math.sin((result * Math.PI) / 180); // * distance * 100 / heigth;
-                console.log("math", x, y);
                 renderPoints[i] = [x, y];
             }
             return renderPoints;
@@ -132,7 +131,6 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
         <>
             <motion.div
                 drag
-                dragConstraints={{left: -100,top:0,bottom: 1500,right: 1500}}
                 dragMomentum={false}
                 onDragEnd={(event, info) => {
                     if (hasChildren && children) {
@@ -170,7 +168,7 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
 
                                 return (
                                     <motion.div
-                                        drag
+                                        drag={false}
                                         className="childOnCricle_entity"
                                         style={{
                                             position: "absolute",

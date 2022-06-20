@@ -21,7 +21,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
         []
     );
 
-    const onMoveObject = (
+    const onMoveEnd = (
         id: number,
         type: string,
         newPosX: number,
@@ -42,6 +42,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                     entity.posY = newPosY;
                     if (hasChidren !== undefined && hasChidren.length > 0) {
                         hasChidren.forEach((childId) => {
+                            // TODO Think logic for childEntities
                             const childEntity = peoplePositions[childId];
                         });
                     }
@@ -49,6 +50,20 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                 }
                 default:
                     return;
+            }
+        }
+    };
+
+    const detectCollisions = (id: number, posX: number, posY: number) => {
+        if (shapePositions !== undefined) {
+            let shape = shapePositions[0];
+            if (
+                posX >= shape.posX &&
+                posX <= shape.posX + shape.width &&
+                posY > shape.posY &&
+                posY <= shape.posY + shape.heigth
+            ) {
+                console.log("detected", shape.posX, shape.posX + shape.heigth);
             }
         }
     };
@@ -70,6 +85,15 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
     return (
         <>
             <div className="board">
+                <svg height="1110" width="700" style={{ position: "absolute" }}>
+                    <line
+                        x1="500"
+                        y1="0"
+                        x2="500"
+                        y2="500"
+                        style={{ stroke: "rgb(255,0,0)" }}
+                    />
+                </svg>
                 {danceData ? (
                     <>
                         {danceData.board.people.map((person) => {
@@ -80,8 +104,8 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                                     name={person.name}
                                     posX={person.posX}
                                     posY={person.posY}
-                                    triggerPositionUpdate={onMoveObject}
-                                    // getPosInfo={detectCollisions}
+                                    triggerPositionUpdate={onMoveEnd}
+                                    triggerCollisionCheck={detectCollisions}
                                 />
                             );
                         })}
@@ -96,7 +120,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                                     heigth={shape.heigth}
                                     width={shape.width}
                                     onShape={[1, 2]}
-                                    triggerPositionUpdate={onMoveObject}
+                                    triggerPositionUpdate={onMoveEnd}
                                 />
                             );
                         })}
