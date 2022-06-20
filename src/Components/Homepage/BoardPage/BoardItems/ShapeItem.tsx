@@ -21,13 +21,13 @@ interface ShapeItemProps {
     width: number;
     onShape: UserEvent["id"][] | [];
 
-    triggerPositionUpdate(
-        id: number,
-        shapeType: string,
-        posX: number,
-        posY: number,
-        children?: number[] | undefined
-    ): void;
+    // triggerPositionUpdate(
+    //     id: number,
+    //     shapeType: string,
+    //     posX: number,
+    //     posY: number,
+    //     children?: number[] | undefined
+    // ): void;
 }
 
 interface PointsProps {
@@ -48,7 +48,7 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
     heigth,
     width,
     onShape,
-    triggerPositionUpdate,
+    // triggerPositionUpdate,
 }) => {
     const [hasChildren, setHasChildren] = useState(true);
     const [children, setChildren] = useState<number[] | undefined>(undefined);
@@ -56,6 +56,20 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
         PointsOnCircleProps | {}
     >({});
     const [arrHelper, setArrHelper] = useState<number[]>([]);
+    const [dragEnabled, setDragEnabled] = useState<boolean>(false);
+    const [dragEnd, setDragEnd] = useState<boolean>(false);
+
+    const handleClickEvent = () => {
+        console.log("click");
+        setDragEnabled(true);
+        setDragEnd(false);
+    };
+
+    const handleButtonClick = () => {
+        console.log("end");
+        setDragEnd(true);
+        setDragEnabled(!dragEnabled);
+    };
 
     const initShape = (onShape: number[]) => {
         setHasChildren(true);
@@ -129,107 +143,89 @@ const ShapeItem: React.FC<ShapeItemProps> = ({
 
     return (
         <>
-            <motion.div
+            <motion.circle
                 drag
                 dragMomentum={false}
-                onDragEnd={(event, info) => {
-                    if (hasChildren && children) {
-                        triggerPositionUpdate(
-                            id,
-                            "shape",
-                            info.point.x,
-                            info.point.y,
-                            [1]
-                        );
-                    }
-                }}
+                onClick={handleClickEvent}
                 style={{
                     position: "absolute",
-                    marginLeft: `${posX}px`,
-                    marginTop: `${posY}px`,
+                    left: `${posX}px`,
+                    top: `${posY}px`,
                     height: `${heigth}px`,
                     width: `${width}px`,
                     backgroundColor: "none",
                     border: "1px solid black",
                     borderRadius: "50%",
+                    zIndex: 0,
                 }}
             >
+                {dragEnabled ? (
+                    <>
+                        {dragEnd ? (
+                            <></>
+                        ) : (
+                            <>
+                                <Button
+                                    className="btn-primary"
+                                    onClick={handleButtonClick}
+                                    style={{
+                                        marginRight: "20px",
+                                        zIndex: 1,
+                                    }}
+                                >
+                                    Yes
+                                </Button>
+                            </>
+                        )}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="36"
+                            height="36"
+                            fill="currentColor"
+                            className="bi bi-arrows-move"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708l2-2zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10zM.146 8.354a.5.5 0 0 1 0-.708l2-2a.5.5 0 1 1 .708.708L1.707 7.5H5.5a.5.5 0 0 1 0 1H1.707l1.147 1.146a.5.5 0 0 1-.708.708l-2-2zM10 8a.5.5 0 0 1 .5-.5h3.793l-1.147-1.146a.5.5 0 0 1 .708-.708l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L14.293 8.5H10.5A.5.5 0 0 1 10 8z"
+                            />
+                        </svg>
+                    </>
+                ) : (
+                    <></>
+                )}
                 <div
-                    className="children_container"
+                    className="point_container"
                     style={{ width: "100%", height: "100%" }}
                 >
-                    {hasChildren ? (
-                        <>
-                            {arrHelper.map((arrItem) => {
-                                const data =
-                                    Object.entries(pointsOnCircle)[arrItem][1];
-                                const posX_onCircle: number = data[0];
-                                const posY_onCircle: number = data[1];
-
-                                return (
-                                    <motion.div
-                                        drag={false}
-                                        className="childOnCricle_entity"
-                                        style={{
-                                            position: "absolute",
-                                            left: `${posX_onCircle}px`,
-                                            top: `${posY_onCircle}px`,
-                                            height: "10px",
-                                            width: "10px",
-                                            borderRadius: "50%",
-                                            backgroundColor: "black",
-                                            border: "2px solid black",
-                                            textAlign: "center",
-                                        }}
-                                    ></motion.div>
-                                );
-                            })}
-                        </>
-                    ) : (
-                        <></>
-                    )}
-                </div>
-
-                {/* {pointsOnCircle && arrHelper.length > 0 && (
                     <>
-                        {arrHelper.forEach((arrItem) => {
-                            const data: PointsProps =
+                        {arrHelper.map((arrItem) => {
+                            const data =
                                 Object.entries(pointsOnCircle)[arrItem][1];
-                            const posX = data.posX;
-                            const posY = data.posY;
+                            const posX_onCircle: number = data[0];
+                            const posY_onCircle: number = data[1];
+
                             return (
-                                <PersonItem
-                                    key={1}
-                                    id={1}
-                                    name={"test"}
-                                    posX={300}
-                                    posY={300}
-                                    triggerPositionUpdate={testFunc}
-                                    // Next method does nothing
-                                    // getPosInfo={testFunc}
-                                />
+                                <motion.div
+                                    drag={false}
+                                    className="childOnCricle_entity"
+                                    style={{
+                                        position: "absolute",
+                                        left: `${posX_onCircle}px`,
+                                        top: `${posY_onCircle}px`,
+                                        height: "10px",
+                                        width: "10px",
+                                        borderRadius: "50%",
+                                        backgroundColor: "black",
+                                        border: "2px solid black",
+                                        textAlign: "center",
+                                    }}
+                                ></motion.div>
                             );
                         })}
                     </>
-                )} */}
-
-                {/* {hasChildren ? (
-                    <div>
-                        <PersonItem
-                            key={1}
-                            id={1}
-                            name={"test"}
-                            posX={300}
-                            posY={300}
-                            triggerPositionUpdate={testFunc}
-                            // Next method does nothing
-                            // getPosInfo={testFunc}
-                        />
-                    </div>
-                ) : (
-                    <></>
-                )} */}
-            </motion.div>
+                </div>
+            </motion.circle>
         </>
     );
 };

@@ -40,6 +40,8 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                     const entity = shapePositions[id];
                     entity.posX = newPosX;
                     entity.posY = newPosY;
+                    console.log(entity.posX, newPosX);
+
                     if (hasChidren !== undefined && hasChidren.length > 0) {
                         hasChidren.forEach((childId) => {
                             // TODO Think logic for childEntities
@@ -63,7 +65,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                 posY > shape.posY &&
                 posY <= shape.posY + shape.heigth
             ) {
-                console.log("detected", shape.posX, shape.posX + shape.heigth);
+                console.log(posX >= shape.posX);
             }
         }
     };
@@ -84,7 +86,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
 
     return (
         <>
-            <div className="board">
+            <div className="board" style={{ width: "100vw", height: "90vh" }}>
                 <svg height="1110" width="700" style={{ position: "absolute" }}>
                     <line
                         x1="500"
@@ -120,7 +122,7 @@ const BoardPage: React.FC<BoardPageProps> = ({ danceData }) => {
                                     heigth={shape.heigth}
                                     width={shape.width}
                                     onShape={[1, 2]}
-                                    triggerPositionUpdate={onMoveEnd}
+                                    // triggerPositionUpdate={onMoveEnd}
                                 />
                             );
                         })}
